@@ -4,33 +4,38 @@
   const currentYear = new Date().getFullYear()
   footer.textContent = `© BLOOM INSTITUTE OF TECHNOLOGY ${currentYear}`
 
- 
-  function buildLearnerCard(learner, mentors){
-    const card = document.createElement('div')
-    card.classList.add('learner-card')
+  const section = document.querySelector('section');
 
-    const nameP = document.createElement('p')
-    nameP.textContent= learner.fullName
+  function buildLearnerCard(learner, mentors) {
+    const card = document.createElement('div');
+    card.classList.add('learner-card');
 
-    const idElement=document.createElement('p')
-    idElement.textContent=`${learner.id}`
+    const nameP = document.createElement('p');
+    nameP.textContent = learner.fullName;
 
-    const emailP = document.createElement('p')
-    emailP.textContent= `${learner.email}`
+    const idElement = document.createElement('p');
+    idElement.textContent = `${learner.id}`;
 
-    const mentorP = document.createElement('p')
-    mentorP.textContent=`${mentors}`
+    const emailP = document.createElement('p');
+    emailP.textContent = `${learner.email}`;
 
-    [nameP, idElement, emailP, mentorP].forEach(p =>{
-      card.appendChild(p)
-    })
-    card.addEventListener('click', Event => {
+    const mentorP = document.createElement('p');
+    mentorP.textContent = `${mentors}`;
+
+    [nameP, idElement, emailP, mentorP].forEach(p => {
+      card.appendChild(p);
+    });
+
+    card.addEventListener('click', event => {
       document.querySelectorAll('.learner-card').forEach(card => {
-      })
-      card.classList.add('active')
-    })
-    return card
+        card.classList.remove('active');
+      });
+      card.classList.add('active');
+    });
+
+    return card;
   }
+
    let learners = [
     {id:6, fullName:'Bob Johnson', email:'bob.johnson@example.com'},
     {id:52, fullName:'Samantha Richards', email: 'samantha.richards@example.com'},
@@ -69,25 +74,39 @@
     {id:58, fullName:'Yukihiro Matsumoto'},
     {id:49, fullName:'Sheryl Sangberg'},
    ]
+   learners.forEach(learner => {
+    const mentorsForLearner = mentors.map(mentor => mentor.fullName).join(', ');
+    const learnerCard = buildLearnerCard(learner, mentorsForLearner);
+    section.appendChild(learnerCard);
+  });
+
+  section.addEventListener('click', event => {
+    if (event.target === section) {
+      const learners = document.querySelectorAll('.learner-card');
+      learners.forEach(card => card.classList.remove('active'));
+    }
+  });
+
+  // Make an HTTP request
+  let url = 'http://localhost:3003/';
+  try {
+    const res = await axios.get(url);
+    console.log(res.data);
+  } catch (error) {
+    console.error('Error:', error);
+  }
 
  
-document.addEventListener('click', evt=< {
-  if(evt.target === document.querySelector('section')) {
-    const learners = document.querySelectorAll('.learner-card')
-    learners.forEach(card => card.classList.remove('active'))
-  }
-})
- console.log(evt.target)
- let url = 'http://localhost:3003/'
- const res = await.axios.get(url)
- comsole.log(res.data)
+
+
 
 
 
     
 
-  
+}
+
 
 
   // 👆 WORK WORK ABOVE THIS LINE 👆
-}
+
