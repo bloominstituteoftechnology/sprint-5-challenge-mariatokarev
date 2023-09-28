@@ -1,4 +1,4 @@
- function sprintChallenge5() { // Note the async keyword, in case you wish to use `await` inside sprintChallenge5
+ async function sprintChallenge5() { // Note the async keyword, in case you wish to use `await` inside sprintChallenge5
   // 👇 WORK WORK BELOW THIS LINE 👇
   const footer = document.querySelector('footer')
   const currentYear = new Date().getFullYear()
@@ -48,18 +48,39 @@
     {id:22, fullName:'Mickey Mouse', email:'mickey.mouse@example.com'},
     {id: 91, fullName:'Daffy Duck', email:'daffy.duck@example.com'}
   ]
-   
-  learners.forEach(learner =>{
-    const learnerCard = buildLearnerCard(learner)
-    document.querySelector('section').appendChild(learnerCard)
-  })
-document.addEventListened('click', evt=< {
+   let mentors=[
+    {id: 12, fullName:'Ada Lovelace'},
+    {id:78, fullName:'Bill Gates'},
+    {id:63, fullName:'Brendan Eich'},
+    {id:42, fullName:'Brian Kernighan'},
+    {id:94, fullName: 'Dan Ingalls'},
+    {id:17, fullName:'Grace Hopper'},
+    {id:7, fullName:'Guido van Rossum'},
+    {id:83, fullName:'James Gosling'},
+    {id:51, fullName:'Linus Torvalds'},
+    {id:67, fullName:'Margaret Hamilton'},
+    {id:60, fullName:'Mark Zuckerberg'},
+    {id:25, fullName:'Martin Fowler'},
+    {id:88, fullName:'Mary Shaw'},
+    {id:71, fullName:'Mitchell Hashimoto'},
+    {id:95, fullName:'Rasmus Lerdorf'},
+    {id:14, fullName:'Robert Martin'},
+    {id:32, fullName:'Sergey Brin'},
+    {id:58, fullName:'Yukihiro Matsumoto'},
+    {id:49, fullName:'Sheryl Sangberg'},
+   ]
+
+ 
+document.addEventListener('click', evt=< {
   if(evt.target === document.querySelector('section')) {
     const learners = document.querySelectorAll('.learner-card')
     learners.forEach(card => card.classList.remove('active'))
   }
 })
- 
+ console.log(evt.target)
+ let url = 'http://localhost:3003/'
+ const res = await.axios.get(url)
+ comsole.log(res.data)
 
 
 
