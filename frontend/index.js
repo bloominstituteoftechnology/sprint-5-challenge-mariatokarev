@@ -4,18 +4,17 @@
   const footer = document.querySelector('footer')
   const currentYear = new Date().getFullYear()
   footer.textContent = `© BLOOM INSTITUTE OF TECHNOLOGY ${currentYear}`
-  try {
-    const learnersResponse = await fetch('http://localhost:3003/api/learners');
-    const mentorsResponse = await fetch('http://localhost:3003/api/mentors');
-    const learners =  learnersResponse.json();
-    const mentors =  mentorsResponse.json();
+  fetch(' http://localhost:3003/api/learners')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error(error));
+  fetch(' http://localhost:3003/api/mentors')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error(error));
 
-   
-    const footer = document.querySelector('footer');
-    const currentYear = new Date().getFullYear();
-    footer.textContent = `© BLOOM INSTITUTE OF TECHNOLOGY ${currentYear}`;
-
-    const cards = document.querySelectorAll('section > div');
+  
+  const cards = document.querySelectorAll('section > div');
     cards.forEach((card) => {
       card.classList.add('card');
     });
@@ -25,7 +24,7 @@
       card.classList.add('learner-card');
 
       const nameP = document.createElement('h3');
-      nameP.textContent = learner.fullName;
+      nameP.textContent = `${learner.name}`;
 
       const idElement = document.createElement('h3');
       idElement.textContent = `${learner.id}`;
@@ -36,16 +35,22 @@
       const mentorP = document.createElement('li');
       mentorP.textContent = `${mentors}`;
 
-      [nameP, idElement, emailP, mentorP].forEach((p) => {
-        card.appendChild(p);
+      [nameP, idElement, emailP, mentorP].forEach(() => {
+        card.appendChild();
       });
 
-     
-      card.addEventListener('click', (event) => {
-      });
+      card.addEventListener('click', async evt => {
+        document.querySelectorAll('.learner-card').forEach(card =>{
+          card.classList.remove('selected');
+        });
+        card.classList.add('active')
+      })
 
       return card;
     }
+
+   
+   
 
    
     learners.forEach((learner) => {
@@ -53,20 +58,10 @@
       const learnerCard = buildLearnerCard(learner, mentor.name);
       document.querySelector('section').appendChild(learnerCard);
     });
-  } catch (error) {
-    console.error('An error occurred:', error);
-  }
-}
-
-
-
- 
-
-
-
-    
-
-  
+      const mentor = mentors.find((mentor) => mentor.id === learner.mentorId);
+      const learnerCard = buildLearnerCard(learner, mentor.name);
+      document.querySelector('section').appendChild(learnerCard);
+    }
 
 
   // 👆 WORK WORK ABOVE THIS LINE 👆
