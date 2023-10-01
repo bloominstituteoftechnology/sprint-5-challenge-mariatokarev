@@ -18,7 +18,7 @@ async function sprintChallenge5() { // Note the async keyword, in case you wish 
   });
 }
 
-function buildLearnerCard(learner, mentorsData) {
+function buildLearnerCard(learnersData, mentorsData) {
   const card = document.createElement('div');
   card.classList.add('card');
 
@@ -27,6 +27,19 @@ function buildLearnerCard(learner, mentorsData) {
 
   const emailDiv = document.createElement('div');
   emailDiv.textContent = learner.email;
+ 
+  const IDElement = document.createElement('h3');
+  IDElement.textContent = `ID:${learner.learnerId}`;
+  IDElement.classList.add('learner-id');
+
+  const infoH2 = document.createElement('h2');
+  infoH2.textContent = 'Learner Info';
+  infoH2.classList.add('info');
+
+  const infoP = document.createElement('p');
+  infoP.textContent = `Full Name: ${learner.learnerFullName}\nEmail: ${learner.email}`;
+  infoP.classList.add('info');
+
 
   const mentorHeadingH4 = document.createElement('h4');
   mentorHeadingH4.textContent = 'Mentors';
@@ -39,14 +52,14 @@ function buildLearnerCard(learner, mentorsData) {
     mentorListUl.appendChild(mentorItemLi);
   });
 
-  [nameH3, emailDiv, mentorHeadingH4, mentorListUl].forEach(element => {
+ [nameH3, emailDiv, IDElement, mentorHeadingH4, mentorListUl, infoH2, infoP].forEach(element => {
     card.appendChild(element);
   });
 
   mentorHeadingH4.addEventListener('click', () => {
     mentorHeadingH4.classList.toggle('open');
     mentorHeadingH4.classList.toggle('closed');
-    mentorListUl.style.display = mentorHeadingH4.classList.contains('open') ? 'block' : 'none';
+    mentorListUl.style.display = mentorHeadingH4.classList.contains('open')? 'block' : 'none';
   });
 
   card.addEventListener('click', () => {
@@ -55,13 +68,7 @@ function buildLearnerCard(learner, mentorsData) {
     });
     card.classList.add('selected');
 
-    const selectedLearnerId = learner.learnerId;
-    const infoP = document.querySelector('.info');
-    if (selectedLearnerId) {
-      infoP.textContent = `The selected learner's ID is: ${selectedLearnerId}`;
-    } else {
-      infoP.textContent = "No learner selected.";
-    }
+   
 
     const mentorListElement = document.getElementById('mentorList');
     while (mentorListElement.firstChild) {
