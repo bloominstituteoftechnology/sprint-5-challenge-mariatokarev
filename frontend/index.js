@@ -3,80 +3,83 @@ async function sprintChallenge5() { // Note the async keyword, in case you wish 
  
   const learnersResponse = await fetch('http://localhost:3003/api/learners');
   const learnersData = await learnersResponse.json();
+  console.log(learnersData)
 
   
   const mentorsResponse = await fetch('http://localhost:3003/api/mentors');
   const mentorsData = await mentorsResponse.json();
+  console.log(mentorsData)
+  const cards = document.querySelector('.cards');
+  let data = [];
 
+  learnersData.forEach(learner => {
+    const learnerCard = buildLearnerCard(learner, mentorsData);
+    cards.appendChild(learnerCard);
+  });
+}
 
- 
-      const cards = document.querySelector('.cards');
-      let data = []; 
-    
-      data.forEach(learner => {
-      
-        const newObject = {
-          learnerId: learner.id,
-          learnerFullName: learner.name,
-          email: learner.email,
-          mentorsArray: []
-        };
-    
-       
-        learner.mentors.forEach(mentor => {
-          const mentorName = `${mentor.firstName} ${mentor.lastName}`;
-          newObject.mentorsArray.push(mentorName);
-        });
-    
-        
-        data.push(newObject);
-    
-        const learnerCard = buildLearnerCard(newObject);
-        cards.appendChild(learnerCard);
-      });
-    
-      function buildLearnerCard(learner) {
-        const card = document.createElement('div');
-        card.classList.add('card');
-    
-        const nameP = document.createElement('h3');
-        nameP.textContent = learner.learnerFullName;
-    
-        const idElement = document.createElement('h3');
-        idElement.textContent = learner.learnerId;
-    
-        const emailP = document.createElement('div');
-        emailP.textContent = learner.email;
-    
-        const mentorList = document.createElement('h4');
-        learner.mentorsArray.forEach(mentorName => {
-          const mentorItem = document.createElement('ul');
-          mentorItem.textContent = mentorName;
-          mentorList.appendChild(mentorItem);
-        });
-    
-        [nameP, idElement, emailP, mentorList].forEach(element => {
-          card.appendChild(element);
-        });
-    
-        card.addEventListener('click', () => {
-          document.querySelectorAll('.learner-card').forEach(card => {
-            card.classList.remove('selected');
-          });
-          card.classList.add('selected');
-        });
-    
-        return card;
-      }
-    
-      document.addEventListener('DOMContentLoaded', () => {
-        data = fetchData(); 
-        data.forEach(learner => {
-          const learnerCard = buildLearnerCard(learner);
-          cards.appendChild(learnerCard);
-        });
-      });
+function buildLearnerCard(learner, mentorsData) {
+  const card = document.createElement('div');
+  card.classList.add('card');
+
+  const nameH3 = document.createElement('h3');
+  nameH3.textContent = learner.learnerFullName;
+
+  const emailDiv = document.createElement('div');
+  emailDiv.textContent = learner.email;
+
+  const mentorHeadingH4 = document.createElement('h4');
+  mentorHeadingH4.textContent = 'Mentors';
+  mentorHeadingH4.classList.add('closed');
+
+  const mentorListUl = document.createElement('ul');
+  learner.mentorsArray.forEach(mentorName => {
+    const mentorItemLi = document.createElement('li');
+    mentorItemLi.textContent = mentorName;
+    mentorListUl.appendChild(mentorItemLi);
+  });
+
+  [nameH3, emailDiv, mentorHeadingH4, mentorListUl].forEach(element => {
+    card.appendChild(element);
+  });
+
+  mentorHeadingH4.addEventListener('click', () => {
+    mentorHeadingH4.classList.toggle('open');
+    mentorHeadingH4.classList.toggle('closed');
+    mentorListUl.style.display = mentorHeadingH4.classList.contains('open') ? 'block' : 'none';
+  });
+
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.card').forEach(card => {
+      card.classList.remove('selected');
+    });
+    card.classList.add('selected');
+
+    const selectedLearnerId = learner.learnerId;
+    const infoP = document.querySelector('.info');
+    if (selectedLearnerId) {
+      infoP.textContent = `The selected learner's ID is: ${selectedLearnerId}`;
+    } else {
+      infoP.textContent = "No learner selected.";
     }
+
+    const mentorListElement = document.getElementById('mentorList');
+    while (mentorListElement.firstChild) {
+      mentorListElement.removeChild(mentorListElement.firstChild);
+    }
+
+    learner.mentorsArray.forEach(mentorName => {
+      const mentorItemLi = document.createElement('li');
+      mentorItemLi.textContent = mentorName;
+      mentorListElement.appendChild(mentorItemLi);
+    });
+  });
+
+  return card;
+}
+ 
+ 
+
     
     // ❗ DO NOT CHANGE THE CODE BELOW
     if (typeof module !== 'undefined' && module.exports) module.exports = { sprintChallenge5 };
