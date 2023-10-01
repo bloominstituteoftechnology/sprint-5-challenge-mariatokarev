@@ -11,6 +11,9 @@ async function sprintChallenge5() { // Note the async keyword, in case you wish 
   console.log(mentorsData)
   const cards = document.querySelector('.cards');
   let data = [];
+  const infop= document.querySelector('.info');
+  infop.textContent = "No learner selected";
+  console.log(infop)
 
   learnersData.forEach(learner => {
     const learnerCard = buildLearnerCard(learner, mentorsData);
@@ -18,12 +21,13 @@ async function sprintChallenge5() { // Note the async keyword, in case you wish 
   });
 }
 
-function buildLearnerCard(learnersData, mentorsData) {
+function buildLearnerCard(learner, mentorsData) {
+  console.log(learner)
   const card = document.createElement('div');
   card.classList.add('card');
 
   const nameH3 = document.createElement('h3');
-  nameH3.textContent = learner.learnerFullName;
+  nameH3.textContent = learner.fullName;
 
   const emailDiv = document.createElement('div');
   emailDiv.textContent = learner.email;
@@ -36,9 +40,7 @@ function buildLearnerCard(learnersData, mentorsData) {
   infoH2.textContent = 'Learner Info';
   infoH2.classList.add('info');
 
-  const infoP = document.createElement('p');
-  infoP.textContent = `Full Name: ${learner.learnerFullName}\nEmail: ${learner.email}`;
-  infoP.classList.add('info');
+
 
 
   const mentorHeadingH4 = document.createElement('h4');
@@ -52,7 +54,7 @@ function buildLearnerCard(learnersData, mentorsData) {
     mentorListUl.appendChild(mentorItemLi);
   });
 
- [nameH3, emailDiv, IDElement, mentorHeadingH4, mentorListUl, infoH2, infoP].forEach(element => {
+ [nameH3, emailDiv, IDElement, mentorHeadingH4, mentorListUl, infoH2].forEach(element => {
     card.appendChild(element);
   });
 
