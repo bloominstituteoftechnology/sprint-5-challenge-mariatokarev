@@ -73,8 +73,12 @@ async function sprintChallenge5() { // Note the async keyword, in case you wish 
         infop.textContent = `The selected learner is ${learner.fullName}`
         card.querySelector('h3').textContent = `${learner.fullName}, ID ${learner.id}`
       } else {
-        console.log('gotta deactivate instead...')
+        card.classList.remove('selected');
+        infop.textContent = "No learner is selected";
+        card.querySelector('h3').textContent = learner.fullName;
+      
       }
+
 
 
 
@@ -91,3 +95,4 @@ async function sprintChallenge5() { // Note the async keyword, in case you wish 
 // ❗ DO NOT CHANGE THE CODE BELOW
 if (typeof module !== 'undefined' && module.exports) module.exports = { sprintChallenge5 };
 else sprintChallenge5();
+
