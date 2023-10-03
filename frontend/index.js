@@ -1,96 +1,112 @@
 async function sprintChallenge5() { // Note the async keyword, in case you wish to use `await` inside sprintChallenge5
   // 👇 WORK WORK BELOW THIS LINE 👇
+  const info = document.querySelector('.info')
+  const cardsContainer = document.querySelector('.cards')
+
+ 
   const footer = document.querySelector('footer')
   const currentYear = new Date().getFullYear()
   footer.textContent = `© BLOOM INSTITUTE OF TECHNOLOGY ${currentYear}`
 
-  const learnersResponse = await fetch('http://localhost:3003/api/learners');
-  const learnersData = await learnersResponse.json();
-  console.log(learnersData)
+  
+  try {
+    let resLearners = await axios.get('/api/learners') 
+    let resMentors = await axios.get('/api/mentors') 
+   
+    let formattedData = []
+    resLearners.data.forEach(learner => {
+      let cardData = {}
+      
+      cardData.id = learner.id
+      cardData.fullName = learner.fullName
+      cardData.email = learner.email
+      cardData.mentors = []
+     
+      learner.mentors.forEach(mentorId => {
+        let mentor = resMentors.data.find(m => m.id === mentorId)
+        const mentorName = `${mentor.firstName} ${mentor.lastName}`
+        cardData.mentors.push(mentorName)
+      })
+     
+      formattedData.push(cardData)
+    })
 
+  
+    info.textContent = 'No learner is selected'
+    formattedData.forEach(learner => {
+      const card = cardComponent(learner)
+      cardsContainer.appendChild(card)
+    })
 
-  const mentorsResponse = await fetch('http://localhost:3003/api/mentors');
-  const mentorsData = await mentorsResponse.json();
-  console.log(mentorsData)
-  const cards = document.querySelector('.cards');
-  const infop = document.querySelector('.info');
-  infop.textContent = "No learner is selected";
+    function cardComponent(data) {
+     
+      const card = document.createElement('div')
+      const name = document.createElement('h3')
+      const email = document.createElement('div')
+      const mentors = document.createElement('h4')
+      const mentorsList = document.createElement('ul')
 
+      
+      card.appendChild(name)
+      card.appendChild(email)
+      card.appendChild(mentors)
+      card.appendChild(mentorsList)
 
-
-  learnersData.forEach(learner => {
-    const learnerCard = buildLearnerCard(learner, mentorsData);
-    cards.appendChild(learnerCard);
-  });
-
-
-  function buildLearnerCard(learner, mentorsData) {
-    const card = document.createElement('div');
-    card.classList.add('card');
-
-
-    const nameH3 = document.createElement('h3');
-    nameH3.textContent = learner.fullName;
-
-    const emailDiv = document.createElement('div');
-    emailDiv.textContent = learner.email;
-
-
-    const mentorHeadingH4 = document.createElement('h4');
-    mentorHeadingH4.textContent = 'Mentors';
-    mentorHeadingH4.classList.add('closed');
-
-    const mentorListUl = document.createElement('ul');
-    learner.mentors.forEach(mentorName => {
-      mentorsData.forEach(mentor => {
-        if (mentorName === mentor.id) {
-
-          const mentorItemLi = document.createElement('li');
-          mentorItemLi.textContent = mentor.firstName + ' ' + mentor.lastName;
-          mentorListUl.appendChild(mentorItemLi);
-        }
+     
+      data.mentors.forEach(mentorName => {
+        const li = document.createElement('li')
+        li.textContent = mentorName
+        mentorsList.appendChild(li)
       })
 
+     
+      card.classList.add('card')
+      mentors.classList.add('closed')
 
-    });
+      name.textContent = data.fullName
+      email.textContent = data.email
+      mentors.textContent = 'Mentors'
 
-    [nameH3, emailDiv, mentorHeadingH4, mentorListUl].forEach(element => {
-      card.appendChild(element);
-    });
-
-    mentorHeadingH4.addEventListener('click', (event) => {
-      if (event.target === mentorHeadingH4) {
-        mentorHeadingH4.classList.toggle('open');
-        mentorHeadingH4.classList.toggle('closed');
-        
-      }
     
+      function selectCard() {
+        info.textContent = `The selected learner is ${data.fullName}`
+        const cards = document.querySelectorAll('.card')
+        cards.forEach(c => {
+          const name = c.querySelector('h3')
+          name.textContent = name.textContent.split(',')[0]
+          c.classList.remove('selected')
+        })
+        card.classList.add('selected')
+        name.textContent = `${data.fullName}, ID ${data.id}`
+      }
+      function deselectCard() {
+        info.textContent = 'No learner is selected'
+        card.classList.remove('selected')
+        name.textContent = name.textContent.split(',')[0]
+      }
 
-      card.addEventListener('click', () => {
-        if (!card.classList.contains('selected')) {
-          cards.querySelectorAll('.card').forEach(card => {
-            card.classList.add('selected');
-          });
-          card.classList.add('selected');
-          infop.textContent = `The selected learner is ${learner.fullName}`;
-          card.querySelector('h3').textContent = `${learner.fullName}, ID ${learner.id}`;
-        } else {
-          card.classList.remove('selected');
-          infop.textContent = "No learner is selected";
-          card.querySelector('h3').textContent = learner.fullName;
+     
+      card.addEventListener('click', evt => {
+        const isSelected = card.classList.contains('selected')
+        const isMentorsVisible = mentors.classList.contains('open')
+
+        if (evt.target !== mentors) { 
+          if (isSelected) deselectCard()
+          else selectCard()
+        } else if (evt.target === mentors) {
+          if (!isSelected) selectCard()
+          if (isMentorsVisible) mentors.classList.replace('open', 'closed')
+          else mentors.classList.replace('closed', 'open')
         }
-      });
-
-
-
-
-
-
-    });
-
-    return card;
+      })
+      return card
+    }
+  } catch (err) {
+  
+    info.textContent = 'Something went wrong'
   }
 }
+
 
 
 
