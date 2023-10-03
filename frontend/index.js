@@ -63,26 +63,21 @@ async function sprintChallenge5() { // Note the async keyword, in case you wish 
       mentorHeadingH4.classList.toggle('closed');
       // mentorListUl.style.display = mentorHeadingH4.classList.contains('open') ? 'block' : 'none';
     });
-   
-    
 
-    cards.addEventListener('click', (evt) => {
-      if (!cards.classList.contains('selected')) {
-        document.querySelectorAll('.cards').forEach(cards => {
-          cards.classList.remove('selected');
+    card.addEventListener('click', () => {
+      if (!card.classList.contains('selected')) {
+        document.querySelectorAll('.card').forEach(card => {
+          card.classList.remove('selected');
         });
-        cards.classList.add('selected');
+        card.classList.add('selected');
         infop.textContent = `The selected learner is ${learner.fullName}`
-        cards.querySelector('h3').textContent = `${learner.fullName}, ID ${learner.id}`
+        card.querySelector('h3').textContent = `${learner.fullName}, ID ${learner.id}`
       } else {
-        cards.classList.remove('selected');
+        card.classList.remove('selected');
         infop.textContent = "No learner is selected";
-        cards.querySelectorAll('h4').textContent = learner.fullName;
+        card.querySelector('h3').textContent = learner.fullName;
       
       }
-    
-
-
 
 
 
@@ -100,3 +95,4 @@ async function sprintChallenge5() { // Note the async keyword, in case you wish 
 // ❗ DO NOT CHANGE THE CODE BELOW
 if (typeof module !== 'undefined' && module.exports) module.exports = { sprintChallenge5 };
 else sprintChallenge5();
+
