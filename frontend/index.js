@@ -58,26 +58,28 @@ async function sprintChallenge5() { // Note the async keyword, in case you wish 
       card.appendChild(element);
     });
 
-    mentorHeadingH4.addEventListener('click', () => {
-      mentorHeadingH4.classList.toggle('open');
-      mentorHeadingH4.classList.toggle('closed');
-      // mentorListUl.style.display = mentorHeadingH4.classList.contains('open') ? 'block' : 'none';
-    });
-
-    card.addEventListener('click', () => {
-      if (!card.classList.contains('selected')) {
-        document.querySelectorAll('.card').forEach(card => {
-          card.classList.remove('selected');
-        });
-        card.classList.add('selected');
-        infop.textContent = `The selected learner is ${learner.fullName}`
-        card.querySelector('h3').textContent = `${learner.fullName}, ID ${learner.id}`
-      } else {
-        card.classList.remove('selected');
-        infop.textContent = "No learner is selected";
-        card.querySelector('h3').textContent = learner.fullName;
-      
+    mentorHeadingH4.addEventListener('click', (event) => {
+      if (event.target === mentorHeadingH4) {
+        mentorHeadingH4.classList.toggle('open');
+        mentorHeadingH4.classList.toggle('closed');
+        
       }
+    
+
+      card.addEventListener('click', () => {
+        if (!card.classList.contains('selected')) {
+          cards.querySelectorAll('.card').forEach(card => {
+            card.classList.add('selected');
+          });
+          card.classList.add('selected');
+          infop.textContent = `The selected learner is ${learner.fullName}`;
+          card.querySelector('h3').textContent = `${learner.fullName}, ID ${learner.id}`;
+        } else {
+          card.classList.remove('selected');
+          infop.textContent = "No learner is selected";
+          card.querySelector('h3').textContent = learner.fullName;
+        }
+      });
 
 
 
